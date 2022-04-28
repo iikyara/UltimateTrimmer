@@ -1,4 +1,11 @@
+build/
+dist/
+*.egg-info/
+
 *.mp4
+*.MOV
 *.csv
 env/
 trim/
+
+__pycache__/
