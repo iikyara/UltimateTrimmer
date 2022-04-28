@@ -1,5 +1,6 @@
 import os, csv
 
+from chardet import detect
 from moviepy.editor import *
 from ultimate_trimmer.logger import Logger
 from ultimate_trimmer.trim_info import TrimInfo
@@ -14,8 +15,13 @@ def trimVideoWithCSV(video_number, csvname):
         Logger.write(f"  Error: CSVファイルが見つかりませんでした。")
         return
 
+    # 文字コード判別
+    with open(csvname, "rb") as f:
+        b = f.read()
+    encoding = detect(b)["encoding"]
+
     # トリミングデータの読み込み
-    with open(csvname, encoding="utf-8") as f:
+    with open(csvname, encoding=encoding) as f:
         reader = csv.reader(f)
         trim_infos = [row for row in reader]
 
@@ -26,8 +32,8 @@ def trimVideoWithCSV(video_number, csvname):
         if head >= len(trim_infos):
             Logger.write("  Error: 試合動画ファイルが見つかりませんでした。")
             return
-        if len(trim_infos[head]) > 0 and os.path.exists(trim_infos[head][0]):
-            videoname = trim_infos[head][0]
+        if len(trim_infos[head]) > 0 and os.path.exists(trim_infos[head][0].strip()):
+            videoname = trim_infos[head][0].strip()
             head += 1
             break
         head += 1
@@ -82,6 +88,7 @@ def trimVideoWithCSV(video_number, csvname):
 # 動画をトリミングする
 # 成功：True，失敗：False
 def trimVideo(trim_info, videoname, output):
+    video = None
     try:
         start = trim_info.start - Option.trim_expansion[0]
         end = trim_info.end + Option.trim_expansion[1]
@@ -112,4 +119,7 @@ def trimVideo(trim_info, videoname, output):
     except Exception as e:
         print(e)
         return False
+    finally:
+        if video != None:
+            video.close()
     return True
