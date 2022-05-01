@@ -13,7 +13,7 @@ def ultrim():
         "--expand", help="クリップの前後の拡張秒数を指定してください。", default=[3, 3], nargs=2, type=int
     )
     parser.add_argument(
-        "--altnum", help="タイトルを感想で代用する際の先頭文字数を指定してください。", default=5, type=int
+        "--altnum", help="ファイル名に入れる感想の先頭文字数を指定してください。", default=10, type=int
     )
     args = parser.parse_args()
 
@@ -24,9 +24,8 @@ def ultrim():
 
     try:
         # 実行
-        for i in range(len(csvnames)):
-            csvname = csvnames[i]
-            trimVideoWithCSV(i, csvname)
+        for csvname in csvnames:
+            trimVideoWithCSV(csvname)
     except Exception as e:
         import traceback
 

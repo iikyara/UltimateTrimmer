@@ -6,9 +6,7 @@ class Option:
     # タイトル未指定の場合に使用する感想の先頭文字数
     alt_impression_head = 5
     # ファイル名に使用不可の文字を設定
-    bad_pattern = (
-        r"\\|\/|:|\*|\?|\"|>|<|\||&|\(|\)|\[|\]|\{|\}|\^|=|;|!|'|\+|,|`|~|\r|\n|\r\n"
-    )
+    bad_pattern = r"\\|\/|:|\*|\?|\"|>|<|\||&|\(|\)|\[|\]|\{|\}|\^|=|;|!|'|\+|,|`|~|\r|\n|\r\n|\u3000"
 
     @classmethod
     def setOpt(cls, save_dir, trim_expansion, alt_impression_head):
